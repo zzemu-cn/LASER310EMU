@@ -1,0 +1,53 @@
+LASER310 频率为 17.7MHz/5 = 3.54MHz
+
+    AG  AS  INTEXT  INV  GM2  GM1  GM0
+    --  --  ------  ---  ---  ---  ---
+     0   0       0    0    X    X    X  Internal Alphanumerics
+     0   0       0    1    X    X    X  Internal Alphanumerics Inverted
+     0   0       1    0    X    X    X  External Alphanumerics
+     0   0       1    1    X    X    X  External Alphanumerics Inverted
+     0   1       0    X    X    X    X  Semigraphics 4
+     0   1       1    X    X    X    X  Semigraphics 6
+     1   X       X    X    0    0    0  Graphics CG1 (64x64x4)    (16 bpr)
+     1   X       X    X    0    0    1  Graphics RG1 (128x64x2)   (16 bpr)
+     1   X       X    X    0    1    0  Graphics CG2 (128x64x4)   (32 bpr)
+     1   X       X    X    0    1    1  Graphics RG2 (128x96x2)   (16 bpr)
+     1   X       X    X    1    0    0  Graphics CG3 (128x96x4)   (32 bpr)
+     1   X       X    X    1    0    1  Graphics RG3 (128x192x2)  (16 bpr)
+     1   X       X    X    1    1    0  Graphics CG6 (128x192x4)  (32 bpr)
+     1   X       X    X    1    1    1  Graphics RG6 (256x192x2)  (32 bpr)
+
+The MC6847 datasheet states that a scanline is 227.5 clock cycles,but experimentation suggests that it is 228. 
+
+Field Sync: Total Period 262*228 clock cycles
+
+分辨率
+256x192
+
+字符色彩
+
+
+
+MC6847模式
+TEXT 32x16 (每个字符 8x12)  32*8=256 16*12=192
+64x64 128x64 128x96 128x192 256x192
+字库 256 个 8*12
+为了简化设计(避免乘3操作)，字库的点阵转化为 8*16，即3KB变为4KB
+
+256*192显示时映射到640*480每个点占2*2
+512*384外的部分留空
+
+AG 0 字符 1 图形
+AS (Semigraphics) SG4 SG6
+EXT 0 内部字库 1 外接字库
+GM2 GM1 GM0 对应 4色 CG1 CG2 CG3 CG6 2色 RG1 RG2 RG3 RG6
+
+
+50*312*228*5 = 17 784 000
+50*312*227.5*5 = 17 745 000
+
+
+Z80 8-Bit Processor (6847 Video Display Processor) 
+71136 CPU Cycles Per Display Frame
+312 Rows Per Display Frame
+50 Frames Per Second

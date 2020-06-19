@@ -1,0 +1,23 @@
+编译工具：
+http://nuwen.net/mingw.html
+https://github.com/StephanTLavavej/mingw-distro
+
+参考代码：
+https://github.com/redcode/Z80
+Highly portable Zilog Z80 CPU emulator written in ANSI C
+
+https://github.com/Lepzulnag/Winbox
+GUI library written in C on top of SDL 2.0 to manage windows for the TI's nSpire calculator
+
+https://github.com/bcrew1375/Miracle-GB
+A simple monochrome Gameboy Classic/Pocket emulator for Windows written in C using the SDL2 library and Visual Studio 2017. The emulator is in very early stages. There is currently no sound, no save files, and display is a little glitchy. 
+
+
+https://github.com/redcode/Z
+Header-only multi-platform general purpose library http://zeta.st
+
+https://github.com/floooh/chips
+8-bit chip and system emulators in standalone C headers
+
+https://github.com/DanB91/GBEmu
+Game Boy Emulator for Mac/Windows/Linux with SDL2 

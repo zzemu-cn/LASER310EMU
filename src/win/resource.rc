@@ -1,0 +1,113 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+
+#include "windows.h"
+//#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+//LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Open VZ",                    IDM_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        IDM_FILE_EXIT
+    END
+    POPUP "Emulate"
+    BEGIN
+        MENUITEM "Run",                         IDM_EMULATE_RUN
+        MENUITEM "Pause",                       IDM_EMULATE_PAUSE
+        MENUITEM SEPARATOR
+        MENUITEM "Reset",                       IDM_EMULATE_RESET
+    END
+    POPUP "Options"
+    BEGIN
+        POPUP "Display Size"
+        BEGIN
+            MENUITEM "1x",                      IDM_OPTIONS_DISPLAYSIZE_1X
+            MENUITEM "2x",                      IDM_OPTIONS_DISPLAYSIZE_2X
+            MENUITEM "3x",                      IDM_OPTIONS_DISPLAYSIZE_3X
+        END
+    END
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+MainAccel ACCELERATORS MOVEABLE PURE 
+BEGIN
+    VK_PRIOR,IDM_OPTIONS_DISPLAYSIZE_FULLSCREEN,     VIRTKEY, CONTROL , ALT
+    VK_F11,  IDM_ACTION_SCREENSHOT,  VIRTKEY, CONTROL
+    VK_F12,  IDM_EMULATE_RESET,   VIRTKEY, CONTROL
+    VK_PAUSE,IDM_EMULATE_PAUSE,       VIRTKEY
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+10                     ICON    DISCARDABLE     "win/icons/LASER310_64.ico"
+ 
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
