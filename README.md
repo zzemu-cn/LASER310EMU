@@ -21,3 +21,4 @@ F11       全屏切换
 鼠标右键  剪切板的内容自动输入到模拟器
 
 ![LASER310EMU](LASER310EMU.JPG)
+![LASER310DD20](LASER310DD20.JPG)
