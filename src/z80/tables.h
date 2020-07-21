@@ -1,7 +1,7 @@
 /* Generated file, see maketables.c. */
 
 static const unsigned char INSTRUCTION_TABLE[256] = {
-
+	// 00
 	NOP,
 	LD_RR_NN,
 	LD_INDIRECT_BC_A,
@@ -20,6 +20,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_N,
 	RRCA,
 
+	// 10
 	DJNZ_E,
 	LD_RR_NN,
 	LD_INDIRECT_DE_A,
@@ -38,6 +39,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_N,
 	RRA,
 
+	// 20
 	JR_DD_E,
 	LD_RR_NN,
 	LD_INDIRECT_NN_HL,
@@ -56,6 +58,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_N,
 	CPL,
 
+	// 30
 	JR_DD_E,
 	LD_RR_NN,
 	LD_INDIRECT_NN_A,
@@ -74,6 +77,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_N,
 	CCF,
 
+	// 40
 	NOP,
 	LD_R_R,
 	LD_R_R,
@@ -92,6 +96,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_INDIRECT_HL,
 	LD_R_R,
 
+	// 50
 	LD_R_R,
 	LD_R_R,
 	NOP,
@@ -110,6 +115,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_INDIRECT_HL,
 	LD_R_R,
 
+	// 60
 	LD_R_R,
 	LD_R_R,
 	LD_R_R,
@@ -128,6 +134,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_INDIRECT_HL,
 	LD_R_R,
 
+	// 70
 	LD_INDIRECT_HL_R,
 	LD_INDIRECT_HL_R,
 	LD_INDIRECT_HL_R,
@@ -146,6 +153,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	LD_R_INDIRECT_HL,
 	NOP,
 
+	// 80
 	ADD_R,
 	ADD_R,
 	ADD_R,
@@ -164,6 +172,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	ADC_INDIRECT_HL,
 	ADC_R,
 
+	// 90
 	SUB_R,
 	SUB_R,
 	SUB_R,
@@ -182,6 +191,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	SBC_INDIRECT_HL,
 	SBC_R,
 
+	// A0
 	AND_R,
 	AND_R,
 	AND_R,
@@ -200,6 +210,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	XOR_INDIRECT_HL,
 	XOR_R,
 
+	// B0
 	OR_R,
 	OR_R,
 	OR_R,
@@ -218,6 +229,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	CP_INDIRECT_HL,
 	CP_R,
 
+	// C0
 	RET_CC,
 	POP_SS,
 	JP_CC_NN,
@@ -236,6 +248,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	ADC_N,
 	RST_P,
 
+	// D0
 	RET_CC,
 	POP_SS,
 	JP_CC_NN,
@@ -254,6 +267,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	SBC_N,
 	RST_P,
 
+	// E0
 	RET_CC,
 	POP_SS,
 	JP_CC_NN,
@@ -272,6 +286,7 @@ static const unsigned char INSTRUCTION_TABLE[256] = {
 	XOR_N,
 	RST_P,
 
+	// F0
 	RET_CC,
 	POP_SS,
 	JP_CC_NN,
@@ -585,7 +600,7 @@ static const unsigned char CB_INSTRUCTION_TABLE[256] = {
 };
 
 static const unsigned char ED_INSTRUCTION_TABLE[256] = {
-
+	// 00
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -604,6 +619,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// 10
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -622,6 +638,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// 20
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -640,6 +657,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// 30
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -658,6 +676,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// 40
 	IN_R_C,
 	OUT_C_R,
 	SBC_HL_RR,
@@ -676,6 +695,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	IM_N,
 	LD_I_A_LD_R_A,
 
+	// 50
 	IN_R_C,
 	OUT_C_R,
 	SBC_HL_RR,
@@ -694,6 +714,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	IM_N,
 	LD_A_I_LD_A_R,
 
+	// 60
 	IN_R_C,
 	OUT_C_R,
 	SBC_HL_RR,
@@ -712,6 +733,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	IM_N,
 	RLD_RRD,
 
+	// 70
 	IN_R_C,
 	OUT_C_R,
 	SBC_HL_RR,
@@ -730,6 +752,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	IM_N,
 	ED_UNDEFINED,
 
+	// 80
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
@@ -748,6 +771,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 
+	// 90
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
@@ -766,6 +790,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 
+	// A0
 	LDI_LDD, 
 	CPI_CPD, 
 	INI_IND, 
@@ -784,6 +809,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 
+	// B0
 	LDIR_LDDR, 
 	CPIR_CPDR, 
 	INIR_INDR, 
@@ -802,6 +828,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED, 
 	ED_UNDEFINED, 
 
+	// C0
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -820,6 +847,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// D0
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -838,6 +866,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// E0
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,
@@ -856,6 +885,7 @@ static const unsigned char ED_INSTRUCTION_TABLE[256] = {
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 
+	// F0
 	ED_UNDEFINED,
 	ED_UNDEFINED,
 	ED_UNDEFINED,

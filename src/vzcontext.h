@@ -64,15 +64,16 @@ typedef struct {
 	Z80_STATE	state;
 	//unsigned char	memory[0x10000];
 	uint8_t		memory[0x10000];
+	uint8_t		vram[0x2000];
 	uint8_t		scancode[10];	// 扩展按键  scancode[8] 上下左右 Backspace TAB ESC `  scancode[9] = [ ] \ / LALT RALT
 	uint8_t		vscancode[10];	// 虚拟按键（自动输入）
 	uint8_t		vkey[VKEY_MAXLEN];
 	int			vkey_len;
 	int			vkey_cur;
-	uint8_t		mc6847gm;
+	//uint8_t		mc6847gm;
 	uint8_t		mc8247font[0x1000];
 	uint8_t		latched_ga;
-	int 		is_done;
+	uint8_t		latched_shrg;
 } VZCONTEXT;
 
 extern void     SystemCall (VZCONTEXT *vzcontext);

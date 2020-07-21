@@ -1,6 +1,11 @@
 #ifndef _DBG_H_
 #define _DBG_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+
 #define	DBG_ENABLED	1
 #define DBG_FILE	"dbg.txt"
 static FILE* dbg_file;
@@ -86,7 +91,9 @@ static char *format(char *fmt, ...) {
 #endif
 
 
-#define LOG(fmt,arg...) fmtprint(stdout,"%s %s %d:"fmt,__FILE__,__FUNCTION__,__LINE__,##arg)
+#define LOG(fmt,arg...) fmtprint(DBG_OSTREAM,"%s %s %d:"fmt,__FILE__,__FUNCTION__,__LINE__,##arg)
+
+#define INFO(fmt,arg...) fmtprint(DBG_OSTREAM,fmt,##arg)
 
 
 #endif /* dbg.h */

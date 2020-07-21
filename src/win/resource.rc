@@ -55,7 +55,9 @@ IDR_MENU1 MENU
 BEGIN
     POPUP "File"
     BEGIN
-        MENUITEM "Open VZ",                    IDM_FILE_OPEN
+        MENUITEM "Open VZ",                     IDM_FILE_OPEN_VZ
+        MENUITEM "Open DSK FD1",                IDM_FILE_OPEN_DSK1
+        MENUITEM "Open DSK FD2",                IDM_FILE_OPEN_DSK2
         MENUITEM SEPARATOR
         MENUITEM "Exit",                        IDM_FILE_EXIT
     END

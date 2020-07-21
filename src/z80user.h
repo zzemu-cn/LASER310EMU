@@ -108,12 +108,7 @@ extern "C" {
 #define Z80_WRITE_WORD_INTERRUPT(address, x)	Z80_WRITE_WORD(address, x)
 
 #define Z80_INPUT_BYTE(port, x)         {(x) = emu_sysio_input(context,port);}
-
-#define Z80_OUTPUT_BYTE(port, x)                                        \
-{                                                                       \
-        ((VZCONTEXT *) context)->is_done = !0; 							\
-        number_cycles = 0;                                              \
-}
+#define Z80_OUTPUT_BYTE(port, x)		{emu_sysio_output(context,port,x);}
 
 #ifdef __cplusplus
 }

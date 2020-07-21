@@ -29,6 +29,7 @@
 
 
 #include "vz.h"
+#include "dsk.h"
 #include "emu.h"
 #include "emu_core.h"
 
@@ -103,12 +104,14 @@ unsigned int screenSizeMultiplier = 3;
 extern unsigned int windowHeight;
 extern unsigned int windowWidth;
 
+size_t SaveFile(const char fn[], char* buf, const size_t sz);
+
 //----------------------------------------//
 
 // Display an error message if there was an invalid opcode ran.
 void OpcodeError( LPCTSTR errorText)
 {
-	MessageBoxA(hwndMain, errorText, _T("Error!"), MB_OK);
+	MessageBoxA(hwndMain, errorText, _T("err"), MB_OK);
 }
 
 //----------------------------------------//
@@ -116,7 +119,7 @@ void OpcodeError( LPCTSTR errorText)
 //----------------------------------------//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	uint8_t *romFileBuffer = 0;
+	uint8_t *tmpFileBuffer = 0;
 	unsigned long int fileSize = 0;
 
 	switch(msg)	{
@@ -124,18 +127,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (InitializeSDL() == -1)
 			{
-				MessageBoxA(hWnd, _T("Could not initialize SDL!"), _T("Error!"), MB_OK);
+				MessageBoxA(hWnd, _T("Could not initialize SDL!"), _T("err"), MB_OK);
 				DestroyWindow(hWnd);
 				exit(0);
 			}
 			RunEmulation();
+			AddFPSTimer();
 		}
 	break;
 	case WM_CLOSE:
 		{
+			RemoveFPSTimer();
 			CloseSDL();
 			DestroyWindow(hWnd);
-			exit(0);
+			//exit(0);
 		}
 	break;
 	case WM_DESTROY:
@@ -147,7 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case IDM_FILE_OPEN:
+		case IDM_FILE_OPEN_VZ:
 			{
 				OPENFILENAME ofn;
 
@@ -162,24 +167,54 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				ofn.lpstrDefExt = (LPCTSTR) _T("");
 
 				if(GetOpenFileName(&ofn)) {
-					romFileBuffer = LoadRomFile(szFileName, &fileSize);
-					if (!romFileBuffer) {
-						MessageBox(hWnd, _T("Error opening VZ file!"), _T("Error!"), MB_OK);
+					tmpFileBuffer = LoadRomFile(szFileName, &fileSize);
+					if (!tmpFileBuffer) {
+						MessageBox(hWnd, _T("Error opening VZ file!"), _T("err"), MB_OK);
 					} else {
-						if(vz_parse(romFileBuffer, fileSize, vz_name, &vz_type, &vz_start, &vz_len, vz_dat)) {
+						if(vz_parse(tmpFileBuffer, fileSize, vz_name, &vz_type, &vz_start, &vz_len, vz_dat)) {
 							PauseEmulation();
 
-							//vzcontext.state.bp = 0x1A33;
-							vzcontext.state.bp = 0x040C;
-							Z80Emulate(&vzcontext.state, 3549*1000, &vzcontext);
-							vzcontext.state.bp = -1;
-							//char s[100];
-							//sprintf(s, "%04X\n", vzcontext.state.pc);
-							//MessageBox(NULL, s, "dbg", MB_OK);
+							// 0x1A33 0x040C
+							while(vzcontext.state.pc!=0x040C)
+								z80emulate(&vzcontext.state, 0, &vzcontext);
+
 							vz_load(&vzcontext, vz_type, vz_start, vz_len, vz_dat);
 
 							RunEmulation();
 						}
+					}
+				}
+			}
+		break;
+		case IDM_FILE_OPEN_DSK1:
+		case IDM_FILE_OPEN_DSK2:
+			{
+				OPENFILENAME ofn;
+
+				ZeroMemory(&ofn, sizeof(ofn));
+
+				ofn.lStructSize = sizeof(ofn);
+				ofn.hwndOwner = hWnd;
+				ofn.lpstrFilter = _T("DSK Files\0*.dsk\0");
+				ofn.lpstrFile = szFileName;
+				ofn.nMaxFile = MAX_PATH;
+				ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+				ofn.lpstrDefExt = (LPCTSTR) _T("");
+
+				if(GetOpenFileName(&ofn)) {
+					tmpFileBuffer = LoadRomFile(szFileName, &fileSize);
+					if (!tmpFileBuffer) {
+						MessageBox(hWnd, _T("Error opening DSK file!"), _T("err"), MB_OK);
+					} else {
+						int r;
+						PauseEmulation();
+						if(LOWORD(wParam)==IDM_FILE_OPEN_DSK1)
+							r = dsk_load(fd_buf_d1, tmpFileBuffer, fileSize);
+						else
+							r = dsk_load(fd_buf_d2, tmpFileBuffer, fileSize);
+						RunEmulation();
+						if(!r)
+							MessageBoxA(hWnd, _T("bad formt"), _T("err"), MB_OK);
 					}
 				}
 			}
@@ -193,9 +228,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 		case IDM_EMULATE_RUN:
 			{
-				//EmulationInitialize(fontrom, sysrom, dosrom);
-				//if (FPSLimit == 1)
-				//	AddFPSTimer();
 				RunEmulation();
 			}
 		break;
@@ -290,7 +322,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	TCHAR title[200];
 	WNDCLASSEX wc;			/* buffer for main window's class */
 
-	uint8_t *romFileBuffer = 0;
+	uint8_t *tmpFileBuffer = 0;
 	unsigned long int fileSize = 0;
 
 	TCHAR szPath[MAXPATH];
@@ -328,16 +360,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	char s_fn[MAXPATH];
 
 	sprintf(s_fn, "%s%s", path, "/rom/character set (1983)(vtech).rom");
-	romFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(fontrom, romFileBuffer, 1024*3);
+	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
+	memcpy(fontrom, tmpFileBuffer, 1024*3);
 
 	sprintf(s_fn, "%s%s", path, "/rom/basic v2.0 (1983)(vtech).rom");
-	romFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(sysrom, romFileBuffer, 1024*16);
+	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
+	memcpy(sysrom, tmpFileBuffer, 1024*16);
 
-	sprintf(s_fn, "%s%s", path, "/rom/dos basic v1.2 (198x)(vtech).rom");
-	romFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(dosrom, romFileBuffer, 1024*8);
+	//sprintf(s_fn, "%s%s", path, "/rom/dos basic v1.2 (198x)(vtech).rom");
+	sprintf(s_fn, "%s%s", path, "/rom/dos basic v1.2 (198x)(vtech)_patch.rom");
+	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
+	memcpy(dosrom, tmpFileBuffer, 1024*8);
 
 	EmulationInitialize(fontrom, sysrom, dosrom);
 
@@ -353,26 +386,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		char* fn = wchar2char(wcfn);
 
-		romFileBuffer = LoadRomFile(fn, &fileSize);
+		tmpFileBuffer = LoadRomFile(fn, &fileSize);
 
 		//MessageBox(NULL, fn, "dbg", MB_OK);
 
 		free(fn);
 
 		vz_type=0;
-		if (!romFileBuffer) {
-			MessageBox(NULL, _T("Error opening VZ file!"), _T("Error!"), MB_OK);
+		if (!tmpFileBuffer) {
+			MessageBox(NULL, _T("Error opening VZ file!"), _T("err"), MB_OK);
 		} else {
-			vz_parse(romFileBuffer, fileSize, vz_name, &vz_type, &vz_start, &vz_len, vz_dat);
+			vz_parse(tmpFileBuffer, fileSize, vz_name, &vz_type, &vz_start, &vz_len, vz_dat);
 		}
 	}
 
 	// 自动执行 vz 文件
 	if(vz_type) {
 		//vzcontext.state.bp = 0x1A33;
-		vzcontext.state.bp = 0x040C;
-		Z80Emulate(&vzcontext.state, 3549*1000, &vzcontext);
-		vzcontext.state.bp = -1;
+		//vzcontext.state.bp = 0x040C;
+		//Z80Emulate(&vzcontext.state, 3549*1000, &vzcontext);
+		while(vzcontext.state.pc!=0x040C)
+			z80emulate(&vzcontext.state, 0, &vzcontext);
+		//vzcontext.state.bp = -1;
 
 		//char s[100];
 		//sprintf(s, "%04X\n", vzcontext.state.pc);
@@ -403,7 +438,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	if(!RegisterClassEx(&wc))
 	{
-		MessageBoxA(NULL, _T("Window Registration Failed!"), _T("Error!"),
+		MessageBoxA(NULL, _T("Window Registration Failed!"), _T("err"),
 			MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
@@ -417,11 +452,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		NULL, NULL, hInstance, NULL);
 
 	if (!OpenSDLWindow(hwndMain, SCREEN_RES_W*3, SCREEN_RES_H*3))
-		MessageBox(NULL, _T("SDL Creation Failed!"), _T("Error!"),
+		MessageBox(NULL, _T("SDL Creation Failed!"), _T("err"),
 			MB_ICONEXCLAMATION | MB_OK);
 
 	if (hwndMain == NULL) {
-		MessageBox(NULL,_T("Window Creation Failed!"), _T("Error!"),
+		MessageBox(NULL,_T("Window Creation Failed!"), _T("err"),
 			MB_ICONEXCLAMATION | MB_OK);
 	} else {
 		ShowWindow(hwndMain, nCmdShow);
@@ -443,6 +478,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	}
 */
 	SDL_SetEventFilter(Emu_EventFilter, NULL);
+
+	AddFPSTimer();
 
 	/* Run the message loop. It will run until GetMessage() returns 0 */
 	while (!quited) {
@@ -476,6 +513,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	UnregisterClass(CLASS_NAME, hInstance);
 
 	//win_mouse_close();
+
+	// dump fdc buf
+	//SaveFile("fd1.bin", fd_buf_d1, FD_TRACK_LEN);
 
 	return 0;
 

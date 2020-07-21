@@ -5,16 +5,18 @@
 
 #define IDR_MENU1                       		101
 
-#define IDM_FILE_OPEN                           40001
-#define IDM_FILE_EXIT                           40002
-#define IDM_EMULATE_RUN                         40003
-#define IDM_EMULATE_PAUSE                       40004
-#define IDM_EMULATE_RESET                       40005
-#define IDM_OPTIONS_DISPLAYSIZE_1X              40006
-#define IDM_OPTIONS_DISPLAYSIZE_2X              40007
-#define IDM_OPTIONS_DISPLAYSIZE_3X              40008
-#define IDM_OPTIONS_DISPLAYSIZE_FULLSCREEN      40009
-#define IDM_ACTION_SCREENSHOT                   40011
+#define IDM_FILE_OPEN_VZ                        40001
+#define IDM_FILE_OPEN_DSK1                      40002
+#define IDM_FILE_OPEN_DSK2                      40003
+#define IDM_FILE_EXIT                           40004
+#define IDM_EMULATE_RUN                         40005
+#define IDM_EMULATE_PAUSE                       40006
+#define IDM_EMULATE_RESET                       40007
+#define IDM_OPTIONS_DISPLAYSIZE_1X              40008
+#define IDM_OPTIONS_DISPLAYSIZE_2X              40009
+#define IDM_OPTIONS_DISPLAYSIZE_3X              40010
+#define IDM_OPTIONS_DISPLAYSIZE_FULLSCREEN      40011
+#define IDM_ACTION_SCREENSHOT                   40012
 
 
 /* For the DeviceConfig code, re-do later. */

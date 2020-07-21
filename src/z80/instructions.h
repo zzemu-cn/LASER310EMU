@@ -34,7 +34,6 @@
  */
 
 enum {
-
         /* 8-bit load group. */
 
         LD_R_R, 

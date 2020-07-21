@@ -32,6 +32,7 @@ SDL_Surface *sdlScreen;
 SDL_Texture *sdlTexture;
 SDL_Renderer *sdlRenderer;
 SDL_DisplayMode displayMode;
+SDL_AudioDeviceID sdlAudioDev;
 //static 
 SDL_TimerID fpsTimerID = 0;
 //----------------------------------------//
@@ -90,6 +91,46 @@ boolean fullScreenOn = 0;
 
 int Emu_EventFilter(void *userdata, union SDL_Event *event);
 
+
+// 50*312*227.5*5 = 17745000
+// 44100Hz
+// 17745000/5/44100 = 80.476
+// 24000Hz
+// 17745000/5/24000 = 147.875
+
+SDL_AudioSpec sdl_audio, sdl_audio_have;
+int audio_stream_pos;
+
+void audio_callback(void *data, unsigned char *stream, int len)
+{
+	int i, pos, c;
+	pos = audio_buf_pos;
+	if(audio_buf_pos<audio_stream_pos)	pos+=AUDIO_BUF_MAXLEN;
+
+	//DBG("%d %d %d", audio_stream_pos, audio_buf_pos, len);
+
+	// 跳播放数据
+	if(pos-audio_stream_pos > AUDIO_BUF_MAXLEN/2) {
+		audio_stream_pos+=len/sizeof(int16_t);
+		audio_stream_pos%=AUDIO_BUF_MAXLEN;
+		//DBG("skip");
+	}
+
+	char *p;
+	if(pos-audio_stream_pos>=len/sizeof(int16_t)) {
+		p = (char*)&(audio_buf[audio_stream_pos]);
+		for(i=0; i<len; i++) stream[i] = p[i];
+
+		audio_play_cnt+=len/sizeof(int16_t);
+
+		audio_stream_pos+=len/sizeof(int16_t);
+		audio_stream_pos%=AUDIO_BUF_MAXLEN;
+	} else {
+		// 无播放数据
+		for(i=0; i<len; i++) stream[i] = audio_volume;
+	}
+}
+
 //----------------------------------------//
 // Initialize the functions that will be  //
 // used in the program.                   //
@@ -99,6 +140,30 @@ int InitializeSDL()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) == -1)
 		return -1;
 
+	audio_volume = 0;
+	audio_stream_pos = 0;
+
+	SDL_memset(&sdl_audio, 0, sizeof(sdl_audio));
+
+	sdl_audio.freq = 24000;
+	sdl_audio.format = AUDIO_S16; //AUDIO_S16LSB; //AUDIO_S16MSB; //AUDIO_S8;
+	sdl_audio.channels = 1;
+	sdl_audio.silence = 0;
+	sdl_audio.samples = 64*2;
+	sdl_audio.size	= 64*sizeof(int16_t);
+	sdl_audio.callback = audio_callback;
+
+/*
+#ifdef _WIN32
+	sdl_audio.samples = 512;
+#else
+	sdl_audio.samples = 4096;
+#endif
+*/
+	//sdlAudioDev = SDL_OpenAudioDevice(NULL, 0, &sdl_audio, &sdl_audio_have, SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+	sdlAudioDev = SDL_OpenAudioDevice(NULL, 0, &sdl_audio, &sdl_audio_have, 0);
+	SDL_PauseAudioDevice(sdlAudioDev, 0);
+	//SDL_Delay();
 	return 0;
 }
 
@@ -137,6 +202,9 @@ int OpenSDLWindow(HWND hWnd, const int w, const int h)
 	//memset(&oldScreenData, 0, 0xC000);
 	//memset(&screenData, 0, 0xC000);
 
+	//Uint32 rmask, gmask, bmask, amask;
+	//rmask = 0xFF000000; gmask = 0x00FF0000; bmask = 0x0000FF00; amask = 0x000000FF;	
+	//sdlScreen = SDL_CreateRGBSurfaceFrom(&screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*4, rmask, gmask, bmask, amask);
 	sdlScreen = SDL_CreateRGBSurfaceFrom(&screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*1, 0, 0, 0, 0);
 
 /*
@@ -153,17 +221,17 @@ border		24'h000000
 background	24'h07ff00
 */
 
-	colors[0].r = 0x07;	colors[0].g = 0xff;	colors[0].b = 0x00;
-	colors[1].r = 0xff;	colors[1].g = 0xff;	colors[1].b = 0x00;
-	colors[2].r = 0x3b;	colors[2].g = 0x08;	colors[2].b = 0xff;
-	colors[3].r = 0xcc;	colors[3].g = 0x00;	colors[3].b = 0x3b;
-	colors[4].r = 0xff;	colors[4].g = 0xff;	colors[4].b = 0xff;
-	colors[5].r = 0x07;	colors[5].g = 0xe3;	colors[5].b = 0x99;
-	colors[6].r = 0xff;	colors[6].g = 0x1c;	colors[6].b = 0xff;
-	colors[7].r = 0xff;	colors[7].g = 0x81;	colors[7].b = 0x00;
+	colors[0].r = 0x07;	colors[0].g = 0xff;	colors[0].b = 0x00; colors[0].a = 0xff;
+	colors[1].r = 0xff;	colors[1].g = 0xff;	colors[1].b = 0x00; colors[1].a = 0xff;
+	colors[2].r = 0x3b;	colors[2].g = 0x08;	colors[2].b = 0xff; colors[2].a = 0xff;
+	colors[3].r = 0xcc;	colors[3].g = 0x00;	colors[3].b = 0x3b; colors[3].a = 0xff;
+	colors[4].r = 0xff;	colors[4].g = 0xff;	colors[4].b = 0xff; colors[4].a = 0xff;
+	colors[5].r = 0x07;	colors[5].g = 0xe3;	colors[5].b = 0x99; colors[5].a = 0xff;
+	colors[6].r = 0xff;	colors[6].g = 0x1c;	colors[6].b = 0xff; colors[6].a = 0xff;
+	colors[7].r = 0xff;	colors[7].g = 0x81;	colors[7].b = 0x00; colors[7].a = 0xff;
 	
-	colors[8].r = 0x00;	colors[8].g = 0x00;	colors[8].b = 0x00;
-	colors[9].r = 0x07;	colors[9].g = 0xff;	colors[9].b = 0x00;
+	colors[8].r = 0x00;	colors[8].g = 0x00;	colors[8].b = 0x00; colors[8].a = 0xff;
+	colors[9].r = 0x07;	colors[9].g = 0xff;	colors[9].b = 0x00; colors[9].a = 0xff;
 
 	SDL_SetPaletteColors(sdlScreen->format->palette, colors, 0, 10);
 
@@ -177,6 +245,10 @@ background	24'h07ff00
 //----------------------------------------//
 void CloseSDL()
 {
+	sdlwin_ready = 0;	Sleep(10); // 等窗口更新完成
+
+	SDL_CloseAudioDevice(sdlAudioDev);
+
 	SDL_Quit();
 }
 
@@ -191,12 +263,12 @@ unsigned int UpdateFPS(Uint32 interval, void *param)
 	//windowTitle = SDL_GetWindowTitle(window);
 	
 	if(vz_len>0)
-		sprintf(windowTitle, "LASER310 %s %04X %04X PC %04X FPS: %d", vz_name, vz_start, vz_len, vzcontext.state.pc, FPS);
+		sprintf(windowTitle, "LASER310 FPS: %d MODE: %02X(M%d P%d) PC: %04X D1: T%d D2: T%d VZ: %s %04X %04X", FPS, vzcontext.latched_shrg, vzcontext.latched_shrg>>2, vzcontext.latched_shrg&0x03, vzcontext.state.pc, fd_track_d1, fd_track_d2, vz_name, vz_start, vz_len);
 	else
-		sprintf(windowTitle, "LASER310 PC %04X FPS: %d", vzcontext.state.pc, FPS);
+		sprintf(windowTitle, "LASER310 FPS: %d MODE: %02X(M%d P%d) PC: %04X D1: T%d D2: T%d", FPS, vzcontext.latched_shrg, vzcontext.latched_shrg>>2, vzcontext.latched_shrg&0x03, vzcontext.state.pc, fd_track_d1, fd_track_d2);
 	SDL_SetWindowTitle(sdlWindow, windowTitle);
 
-	//FPS = 0;
+	FPS = 0;
 	
 	return interval;
 }

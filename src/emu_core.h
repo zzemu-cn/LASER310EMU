@@ -2,12 +2,20 @@
 #define EMU_CORE_H_
 
 #include "vzcontext.h"
+#include "fd.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern VZCONTEXT	vzcontext;
+
+#define AUDIO_BUF_MAXLEN (64*64)
+extern int16_t audio_buf[AUDIO_BUF_MAXLEN];
+extern int audio_buf_pos;
+extern int16_t audio_volume;
+extern int audio_data_cnt;
+extern int audio_play_cnt;
 
 extern char		vz_name[18];
 extern uint8_t	vz_type;
@@ -29,6 +37,7 @@ extern uint8_t emu_write_byte(void *context, uint16_t adr, uint8_t x);
 extern uint16_t emu_write_word(void *context, uint16_t adr, uint16_t x);
 
 extern uint8_t emu_sysio_input(void *contex, uint8_t port);
+extern uint8_t emu_sysio_output(void *context, uint8_t port, uint8_t x);
 
 #ifdef __cplusplus
 }
