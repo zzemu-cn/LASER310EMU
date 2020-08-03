@@ -1,0 +1,99 @@
+通常的命令行方式模拟(SDL2)，就是在循环里模拟并更新屏幕。
+
+在Windows图形界面环境下，
+程序模拟代码执行有2种办法，
+1是创建新的执行线程，系统执行稳定，占用系统资源。
+2是在程序初始化时创建定时器，对定时事件进行响应。
+
+86box模拟器用的是第1种方式
+
+
+通过SDL_PollEvent函数来监听消息，即从底层来提取事件。
+事件处理允许程序响应来自用户的输入,而等待相应的时候，程序就会阻塞，从而将图形窗口定格在屏幕当中。
+如果有用户输入，则从阻塞状态中返回，同时SDL_Event也被赋予了代表某个事件的特定值。
+SDL_PollEvents()函数的功能是事件轮询。
+首先通过SDL_PumpEvents函数来处理硬件独立的事件后，再通过SDL_PeepEvents从队列中提取事件。
+另外还有两个事件处理函数：
+SDL_WaitEvent()必须等到有一个事件才返回，而SDL_PollEvent 没有事件也立即返回，这样提高系统反应速度。
+SDL_PeepEvents()是提出查看事件，但事件本身仍然在事件队列中。
+
+
+VZ文件的加载方法，可以参考 mame 源代码里 vtech1.cpp 中 SNAPSHOT_LOAD_MEMBER(vtech1_state::snapshot_cb)
+
+
+内存地址：
+0000 -- 3FFF ROM 16KB
+4000 -- 67FF DOS
+6800 -- 6FFF I/O
+7000 -- 77FF VRAM 2KB (SRAM 6116)
+7800 -- 7FFF RAM 2KB
+8000 -- B7FF RAM 14KB
+B800 -- BFFF RAM ext 2KB
+C000 -- F7FF RAM ext 14KB
+
+HEX   DEC
+0000  0
+1000  4096
+2000  8192
+3000  12288
+4000  16384
+5000  20480
+6000  24576
+6800  26624
+7000  28672
+7800  30720
+7FFF  32767
+8000  32768   -32768
+9000  36864   -28672
+A000  40960   -24576
+B000  45056   -20480
+B800  47104   -18432
+C000  49152   -16384
+D000  53248   -12288
+E000  57344   -8192
+F000  61440   -4096
+F7FF  63487   -2049
+FFFF  65535   -1
+
+-65536
+
+
+解决问题
+1、反复进中断 0038
+经跟踪发现是 DOS ROM 引起的，屏蔽掉即正常。
+068E 检测外部 ROM 接口。
+
+2、窗口全屏显示后，不能正常更新
+查找资料未能解决
+
+SDL_DestroyWindow(sdlWindow) 调用了 SDL_HideWindow(window)，需要加入 ShowWindow(hwndMain, SW_SHOWNORMAL);
+
+http://www.voidcn.com/article/p-dmebmmgj-kw.html
+
+查源代码，反复调试后，发现问题：
+
+// 仅仅简单的事件循环不会出错
+while(GetMessage(&messages, hwndMain, 0, 0) > 0) {
+	TranslateMessage(&messages);
+	DispatchMessage(&messages);
+}
+
+加入 EventFilter 则出现问题。
+SDL_SetEventFilter(Emu_EventFilter, NULL);
+
+问题的原因：EventFilter 代码中未处理的事件应返回1，交由系统默认程序处理。
+
+int Emu_EventFilter(void *userdata, union SDL_Event *event)
+{
+	switch(event->type) {
+	case SDL_KEYDOWN:
+		...
+		return 0;
+	case SDL_KEYUP:
+		...
+		return 0;
+    	}
+	// 事件如果不处理，返回 1
+	return 1;
+}
+

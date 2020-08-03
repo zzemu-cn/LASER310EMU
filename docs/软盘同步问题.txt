@@ -1,0 +1,87 @@
+问题1：不能同步
+
+ROM:5673 loc_5673:                               ; CODE XREF: IDAM_53EA+28Dj
+ROM:5673                 in      a, (11h)
+ROM:5675                 in      a, (c)
+ROM:5677                 jp      p, loc_5673
+ROM:567A                 dec     hl
+ROM:567B                 inc     hl
+ROM:567C                 dec     hl
+ROM:567D                 inc     hl
+ROM:567E                 dec     hl
+ROM:567F                 inc     hl
+ROM:5680                 nop
+ROM:5681                 ld      a, 0
+ROM:5683
+ROM:5683 loc_5683:                               ; CODE XREF: IDAM_53EA+29Dj
+ROM:5683                 in      a, (11h)
+ROM:5685                 in      a, (c)
+ROM:5687                 jp      p, loc_5683
+
+这两条转移指令，是难以同步的根本原因。IDAM 读取0xFE, 0xE7, 0x18, 0xC3, 前面三个0xFE, 0xE7, 0x18 容易满足，但 0xC3却很难。要求这两条转移指令不能执行，最终要精确控制 连续 POLLING 的长度。
+
+解决的方法：数据移位操作使用 POLLING 下拉来更新。原方法是读取 11 进行移位操作。
+
+
+取POLLING成功（值为1），到读取DATA中间间隔了 0x43 (67) 个时钟周期。
+时钟位长 28 个，28 + 67 = 95
+FD_POLL_LEN 的范围在 28 到 48 之间
+
+满足条件：两次读取 POLLING 的时间相差 0x16 (22)个时钟周期
+
+但不满足：
+经过跟踪，下面这两组指令较为特殊，导致两次读取 POLLING 的时间是 0x13 + 2 + 0x0A + 2 = 0x21 = 33
+ROM:5673 loc_5673:                               ;
+ROM:5673                 in      a, (11h)
+ROM:5675                 in      a, (c)
+ROM:5677                 jp      p, loc_5673
+
+ROM:5683 loc_5683:                               ;
+ROM:5683                 in      a, (11h)
+ROM:5685                 in      a, (c)
+ROM:5687                 jp      p, loc_5683
+
+POLLING最低时钟位长 33 个，33 + 67 = 100
+FD_POLL_LEN 的范围在 33 到 48 之间
+
+
+问题2：IDAM 找不到 00 和 08 扇区。
+
+每轨的扇区号依次为：
+0x00 0x0B 0x06 0x01
+0x0C 0x07 0x02 0x0D
+0x08 0x03 0x0E 0x09
+0x04 0x0F 0x0A 0x05
+
+
+FD_POLL_LEN 取 30
+IDAM 找不到 00 和 08 扇区。
+
+FD_POLL_LEN 取 33
+IDAM 找不到 0B 扇区。
+
+需要引入位置偏差来解决。
+
+
+
+来自bill的 FM Decode Y1 RDDATA A D0 D12_CLR.logicdata
+
+	物理软驱抓到的数据，过0有1.125us的上升沿：
+	数据 0
+
+	整个数据
+	32.25us 其中上沿1.125us
+	31.88us 其中上沿1.125us
+	31.63us 其中上沿1.125us
+	30.25us 其中上沿1.125us
+	30us 其中上沿1.125us
+
+	数据 1
+
+	时钟位
+	12.25us 其中上沿1.125us
+	数据位
+	19.75us 其中上沿1.125us
+
+
+
