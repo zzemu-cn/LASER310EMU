@@ -526,7 +526,7 @@ void emu_drawscreen()
 						p = screenData+y*256+x*8;
 						bits = vzcontext.vram[y*32 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = (bits>>7)&0x01 | mc6847_css;
 							*p	= color;
 							p++;
 							bits<<=1;
@@ -562,7 +562,7 @@ void emu_drawscreen()
 						p = screenData+y*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = (bits>>7)&0x01 | mc6847_css;
 							*p	= color;
 							p++;
 							*p	= color;
@@ -602,7 +602,7 @@ void emu_drawscreen()
 						p = screenData+y*2*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = (bits>>7)&0x01 | mc6847_css;
 							*p	= color;
 							p[256]	= color;
 							p++;
@@ -645,7 +645,7 @@ void emu_drawscreen()
 						p = screenData+y*3*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = (bits>>7)&0x01 | mc6847_css;
 							p[    0]	= color;
 							p[    1]	= color;
 							p[256  ]	= color;
