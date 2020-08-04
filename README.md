@@ -22,3 +22,7 @@ F11       全屏切换
 
 ![LASER310EMU](LASER310EMU.JPG)
 ![LASER310DD20](LASER310DD20.JPG)
+
+# Build environment
+To build LASER310EMU, you need to download mingw-17.1. It includes x64-native build of GCC 9.2.0 and SDL 2.0.10.
+[MinGW Distro - nuwen.net](https://nuwen.net/mingw.html)
