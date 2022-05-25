@@ -79,13 +79,10 @@ emu_thread(void *param)
 	// 17745000/5/1000 = 3549
 	const uint32_t cycles_1ms = 3549; // 每毫秒执行CPU时钟数
 
-	uint32_t ticks_int, ticks_vkey, interval, delay_vkey, frames;	// 中断计时，虚拟按键计时
+	uint32_t ticks_int, ticks_vkey, interval, delay_vkey;	// 中断计时，虚拟按键计时
 	uint32_t old_time, new_time;
 	uint32_t one_s_cnt;
 	int vkey_keydown;
-
-	uint16_t last_pc;
-
 
 	total = 0;
 	total_1ms = 0;
@@ -327,10 +324,10 @@ uint16_t emu_read_word(void *context, uint16_t adr)
 
 uint8_t emu_write_byte(void *context, uint16_t adr, uint8_t x)
 {
-	uint8_t cur_x;
+	uint8_t /*last_x,*/ cur_x;
 	if((adr&0xf800)==0x6800) {
 		// D5，D0 扬声器 00 11 都是无声 10 01 不同则发声
-		last_x = ((VZCONTEXT *)context)->latched_ga&0x21;
+		//last_x = ((VZCONTEXT *)context)->latched_ga&0x21;
 		cur_x = x&0x21;
 		audio_vol =	(cur_x==0x20)	?	audio_volume:
 					(cur_x==0x01)	?	-audio_volume:
