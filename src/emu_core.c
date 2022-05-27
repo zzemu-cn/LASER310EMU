@@ -6,7 +6,7 @@
 
 #include "utils/bithacks.h"
 
-#include "plat.h"
+#include "plat/plat.h"
 
 #include "emu_core.h"
 #include "vkey.h"
@@ -209,10 +209,8 @@ emu_thread(void *param)
 
 
 void
-emu_close(thread_t *ptr)
+emu_close(thread_t *threadid)
 {
-    int i;
-
     /* Wait a while so things can shut down. */
     plat_delay_ms(200);
 
@@ -220,8 +218,8 @@ emu_close(thread_t *ptr)
     //startblit();
 
     /* Terminate the main thread. */
-    if (ptr != NULL) {
-		thread_kill(ptr);
+    if (threadid != NULL) {
+		thread_kill(threadid);
 
 		/* Wait some more. */
 		plat_delay_ms(200);

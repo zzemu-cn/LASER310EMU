@@ -3,7 +3,7 @@
 
 #include "bithacks.h"
 
-#include "plat.h"
+#include "plat/plat.h"
 #include "plat_win.h"
 
 #include "win_gblvar.h"
