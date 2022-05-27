@@ -6,16 +6,16 @@ UTF=ANSI
 # UNICODE
 #UTF=UNICODE
 
-# ÅäÖÃ¹¤¾ßÁ´
-AS=as	# »ã±àÆ÷
-CC=gcc	# C±àÒëÆ÷
-CXX=g++	# C++±àÒëÆ÷
-RC=windres # ×ÊÔ´±àÒëÆ÷
-LD=gcc	# Á´½ÓÆ÷
-#LD=g++	# Á´½ÓÆ÷
+# é…ç½®å·¥å…·é“¾
+AS=as	# æ±‡ç¼–å™¨
+CC=gcc	# Cç¼–è¯‘å™¨
+CXX=g++	# C++ç¼–è¯‘å™¨
+RC=windres # èµ„æºç¼–è¯‘å™¨
+LD=gcc	# é“¾æ¥å™¨
+#LD=g++	# é“¾æ¥å™¨
 OBJDUMP=objdump
 
-# ÅäÖÃ¹¤¾ßÁ´µÄµ÷ÓÃ²ÎÊı
+# é…ç½®å·¥å…·é“¾çš„è°ƒç”¨å‚æ•°
 ASFLAGS=-g
 
 CCFLAGS =-g -std=c11   -I. -I./z80 -I./utils -I./win -I./plat/win -IC:/MinGW/include -D$(UTF) -D_FILE_OFFSET_BITS=64
@@ -27,7 +27,7 @@ OBJDUMPFLAGS=-a -f
 
 LDFLAGS_SDL2 = -lsdl2 -lwinmm -limm32 -lole32 -loleaut32 -lversion -lopengl32 -lgdi32 -lgdiplus -lsetupapi
 
-# ÎÒÃÇÄ¿±ê£¬¿ÉÓÃ'\'»»ĞĞ
+# æˆ‘ä»¬ç›®æ ‡ï¼Œå¯ç”¨'\'æ¢è¡Œ
 
 #SRCS=$(wildcard *.c)
 #OBJS=$(SRCS:.c=.o)
@@ -36,15 +36,15 @@ LDFLAGS_SDL2 = -lsdl2 -lwinmm -limm32 -lole32 -loleaut32 -lversion -lopengl32 -l
 SRCS=$(wildcard ./*.c ./z80/*.c ./utils/*.c ./win/*.c ./plat/win/*.c)
 OBJS=$(SRCS:.c=.o) win/resource.o
 
-# ÈçºÎ±àÒë¸÷ÖÖÄ¿±êµÄ¹ı³Ì
-# Ä¬ÈÏÄ¿±ê£¨make ²»´øÄ¿±ê¶ÔÏó£¬»òÕßmake all£©
+# å¦‚ä½•ç¼–è¯‘å„ç§ç›®æ ‡çš„è¿‡ç¨‹
+# é»˜è®¤ç›®æ ‡ï¼ˆmake ä¸å¸¦ç›®æ ‡å¯¹è±¡ï¼Œæˆ–è€…make allï¼‰
 
 all: $(TARGET)
 
 $(TARGET) : $(OBJS) 
 	$(LD) $(OBJS) -o $(TARGET) $(LDFLAGS) $(LDFLAGS_SDL2)
 
-# Ö¸¶¨´Ó.cÎÄ¼şÉú³É.oÎÄ¼şµÄ·½·¨£¬$@´ú±íÊä³öÎÄ¼ş£¬$<´ú±íÊäÈëÎÄ¼ş
+# æŒ‡å®šä».cæ–‡ä»¶ç”Ÿæˆ.oæ–‡ä»¶çš„æ–¹æ³•ï¼Œ$@ä»£è¡¨è¾“å‡ºæ–‡ä»¶ï¼Œ$<ä»£è¡¨è¾“å…¥æ–‡ä»¶
 %.o : %.c
 	$(CC) $(CCFLAGS) -c -o $@ $<
 
@@ -59,4 +59,3 @@ $(TARGET) : $(OBJS)
 
 clean :
 	find . -name '*.o' | xargs rm -rf
-
