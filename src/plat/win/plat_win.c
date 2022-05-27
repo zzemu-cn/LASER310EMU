@@ -109,7 +109,7 @@ CreateConsole(int init)
 }
 
 // 从剪切板中取得数据
-BOOL GetTextFromClipboard(char* buf)
+bool GetTextFromClipboard(char* buf)
 {
 	buf[0] = 0;
 

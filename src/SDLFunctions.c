@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-#include <windows.h>
 
 #include "bithacks.h"
 
