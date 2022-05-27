@@ -23,7 +23,7 @@
 #endif
 */
 
-#define INFO
+#define INFO(fmt,arg...)
 
 
 /* Indirect (HL) or prefixed indexed (IX + d) and (IY + d) memory operands are
@@ -228,7 +228,7 @@ int z80emulate (Z80_STATE * state,
 		goto start_emulation;
 	}
 
-start_fetch:
+//start_fetch:
 	Z80_FETCH_BYTE(pc, opcode);
 	//printf("fetch pc %04x %02x\n", pc, opcode);
 	//INFO("fetch pc %04X %02X", pc, opcode);

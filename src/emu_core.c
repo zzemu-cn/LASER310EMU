@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sdl2/sdl.h>
 #include <windows.h>
 
-#include "bithacks.h"
+#include "utils/bithacks.h"
 
 #include "plat.h"
 
@@ -22,7 +23,7 @@
 #endif
 */
 
-#define INFO
+#define INFO(fmt,arg...)
 
 extern void UpdateScreen();
 extern unsigned long long int FPS;
@@ -79,13 +80,10 @@ emu_thread(void *param)
 	// 17745000/5/1000 = 3549
 	const uint32_t cycles_1ms = 3549; // 每毫秒执行CPU时钟数
 
-	uint32_t ticks_int, ticks_vkey, interval, delay_vkey, frames;	// 中断计时，虚拟按键计时
+	uint32_t ticks_int, ticks_vkey, interval, delay_vkey;	// 中断计时，虚拟按键计时
 	uint32_t old_time, new_time;
 	uint32_t one_s_cnt;
 	int vkey_keydown;
-
-	uint16_t last_pc;
-
 
 	total = 0;
 	total_1ms = 0;
@@ -327,10 +325,10 @@ uint16_t emu_read_word(void *context, uint16_t adr)
 
 uint8_t emu_write_byte(void *context, uint16_t adr, uint8_t x)
 {
-	uint8_t last_x, cur_x;
+	uint8_t /*last_x,*/ cur_x;
 	if((adr&0xf800)==0x6800) {
 		// D5，D0 扬声器 00 11 都是无声 10 01 不同则发声
-		last_x = ((VZCONTEXT *)context)->latched_ga&0x21;
+		//last_x = ((VZCONTEXT *)context)->latched_ga&0x21;
 		cur_x = x&0x21;
 		audio_vol =	(cur_x==0x20)	?	audio_volume:
 					(cur_x==0x01)	?	-audio_volume:
@@ -493,7 +491,6 @@ void emu_drawscreen()
 {
 	//int scanlineY;
 	int y, x, r, c;
-	int adr;
 	uint8_t *p;
 	uint8_t ch, font_bits, bits, b;
 	uint8_t color, color_idx_0, color_idx_1;
@@ -526,7 +523,7 @@ void emu_drawscreen()
 						p = screenData+y*256+x*8;
 						bits = vzcontext.vram[y*32 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = ((bits>>7)&0x01) | 0x02 | mc6847_css;
 							*p	= color;
 							p++;
 							bits<<=1;
@@ -543,7 +540,7 @@ void emu_drawscreen()
 						p = screenData+y*256+x*4*2;
 						bits = vzcontext.vram[y*32 + x];
 						for(c=0;c<4;c++) {
-							color = (bits>>6)&0x03 | mc6847_css;
+							color = ((bits>>6)&0x03) | mc6847_css;
 							*p	= color;
 							p++;
 							*p	= color;
@@ -562,7 +559,7 @@ void emu_drawscreen()
 						p = screenData+y*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = ((bits>>7)&0x01) | 0x02 | mc6847_css;
 							*p	= color;
 							p++;
 							*p	= color;
@@ -581,7 +578,7 @@ void emu_drawscreen()
 						p = screenData+y*2*256+x*4*2;
 						bits = vzcontext.vram[y*32 + x];
 						for(c=0;c<4;c++) {
-							color = (bits>>6)&0x03 | mc6847_css;
+							color = ((bits>>6)&0x03) | mc6847_css;
 							*p	= color;
 							p[256]	= color;
 							p++;
@@ -602,7 +599,7 @@ void emu_drawscreen()
 						p = screenData+y*2*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = ((bits>>7)&0x01) | 0x02 | mc6847_css;
 							*p	= color;
 							p[256]	= color;
 							p++;
@@ -623,7 +620,7 @@ void emu_drawscreen()
 						p = screenData+y*3*256+x*4*2;
 						bits = vzcontext.vram[y*32 + x];
 						for(c=0;c<4;c++) {
-							color = (bits>>6)&0x03 | mc6847_css;
+							color = ((bits>>6)&0x03) | mc6847_css;
 							p[    0]	= color;
 							p[    1]	= color;
 							p[256  ]	= color;
@@ -645,7 +642,7 @@ void emu_drawscreen()
 						p = screenData+y*3*256+x*8*2;
 						bits = vzcontext.vram[y*16 + x];
 						for(c=0;c<8;c++) {
-							color = (bits>>7)&0x01 | 0x02 | mc6847_css;
+							color = ((bits>>7)&0x01) | 0x02 | mc6847_css;
 							p[    0]	= color;
 							p[    1]	= color;
 							p[256  ]	= color;

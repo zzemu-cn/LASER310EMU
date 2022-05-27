@@ -10,7 +10,7 @@
 #define VZCONTEXT_H_
 
 #include <stdint.h>
-#include "z80emu.h"
+#include "z80/z80emu.h"
 
 /*
    KD5 KD4 KD3 KD2 KD1 KD0 扫描用地址
