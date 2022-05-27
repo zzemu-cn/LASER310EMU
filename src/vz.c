@@ -6,7 +6,7 @@
 
 uint32_t vz_parse(uint8_t* buf, uint32_t buf_len, uint8_t* vz_name, uint8_t *vz_type, uint16_t *vz_start, uint16_t *vz_len, uint8_t *dat)
 {
-	uint32_t	c, i, j, fn_len;
+	uint32_t	c, fn_len;
 	uint16_t	vzf_len;
 	vz_header*	h;
 

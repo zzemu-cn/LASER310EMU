@@ -4,7 +4,7 @@
 #include <sdl2/sdl.h>
 #include <windows.h>
 
-#include "plat.h"
+#include "plat/plat.h"
 #include "emu_core.h"
 
 // An array that holds the pixel data that will actually be drawn to the screen.
