@@ -11,3 +11,4 @@
 .vscode/configurationCache.log
 src.esp32/*
 *.exe
+*.o
