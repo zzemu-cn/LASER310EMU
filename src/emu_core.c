@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sdl2/sdl.h>
-#include <windows.h>
+#include <stdint.h>
 
 #include "utils/bithacks.h"
 

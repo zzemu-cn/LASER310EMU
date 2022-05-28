@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <sdl2/sdl.h>
-#include <windows.h>
+#include <string.h>
 
 #include "plat/plat.h"
 #include "emu_core.h"
