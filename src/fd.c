@@ -1,5 +1,7 @@
-#include "prgdef.h"
-#include "bithacks.h"
+#include <stddef.h>
+
+#include "utils/prgdef.h"
+#include "utils/bithacks.h"
 #include "fd.h"
 
 /*
@@ -104,21 +106,19 @@ void seek_phase(uint8_t ct)
 	ct = seek_phase_mask(ct);
 	last_ct = seek_phase_mask(fd_ct_latch);
 
-	if(
-			((ct&0x0f)==0x01) && (last_ct&0x02) // PH0 << PH1
-		||	((ct&0x0f)==0x02) && (last_ct&0x04) // PH1 << PH2
-		||	((ct&0x0f)==0x04) && (last_ct&0x08) // PH2 << PH3
-		||	((ct&0x0f)==0x08) && (last_ct&0x01) // PH3 << PH0
+	if((((ct&0x0f)==0x01) && (last_ct&0x02)) || // PH0 << PH1
+       (((ct&0x0f)==0x02) && (last_ct&0x04)) || // PH1 << PH2
+       (((ct&0x0f)==0x04) && (last_ct&0x08)) || // PH2 << PH3
+       (((ct&0x0f)==0x08) && (last_ct&0x01))    // PH3 << PH0
 	) {
 		if(DRIVE1(ct)&&(fd_track_d1>0)) fd_track_d1--;
 		if(DRIVE2(ct)&&(fd_track_d2>0)) fd_track_d2--;
 	}
 
-	if(
-			((ct&0x0f)==0x01) && (last_ct&0x08) // PH0 << PH3
-		||	((ct&0x0f)==0x02) && (last_ct&0x01) // PH1 << PH0
-		||	((ct&0x0f)==0x04) && (last_ct&0x02) // PH2 << PH1
-		||	((ct&0x0f)==0x08) && (last_ct&0x04) // PH3 << PH2
+	if((((ct&0x0f)==0x01) && (last_ct&0x08)) || // PH0 << PH3
+	   (((ct&0x0f)==0x02) && (last_ct&0x01)) || // PH1 << PH0
+	   (((ct&0x0f)==0x04) && (last_ct&0x02)) || // PH2 << PH1
+	   (((ct&0x0f)==0x08) && (last_ct&0x04))    // PH3 << PH2
 	) {
 		if(DRIVE1(ct)&&(fd_track_d1<79)) fd_track_d1++;
 		if(DRIVE2(ct)&&(fd_track_d2<79)) fd_track_d2++;
