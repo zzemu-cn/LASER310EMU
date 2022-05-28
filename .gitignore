@@ -11,5 +11,5 @@
 .vscode/configurationCache.log
 src.esp32/*
 src.mingw/*
-*.exe
+LASER310EMU.exe
 *.o
