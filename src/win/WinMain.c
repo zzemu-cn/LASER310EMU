@@ -53,6 +53,8 @@ HANDLE	thMain;
 //----------------------------------------//
 extern void CloseSDL();
 extern int  InitializeSDL();
+extern void UpdateScreen();
+
 uint8_t* LoadRomFile(char filename[], unsigned long int *fileSize);
 extern void AddFPSTimer();
 extern void RemoveFPSTimer();
@@ -337,7 +339,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//MessageBoxA(NULL, "ANSI", "dbg", MB_OK);
 #endif
 
-
 	if( !GetModuleFileName( NULL, szPath, MAXPATH ) ) {
 		MessageBoxA(NULL, _T("GetModuleFileName failed"), _T("info"), MB_OK);
 		return 0;
@@ -541,6 +542,7 @@ do_start(void)
 	//win_log("Main timer precision: %llu\n", timer_freq);
 
 	/* Start the emulator, really. */
+	emu_setScreenUpdateCallback(UpdateScreen);
 	thMain = thread_create(emu_thread, &quited);
 	SetThreadPriority(thMain, THREAD_PRIORITY_HIGHEST);
 }

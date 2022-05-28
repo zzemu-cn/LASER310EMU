@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h>
 
-#include "bithacks.h"
+#include "utils/bithacks.h"
 
 #include "plat/plat.h"
-#include "plat_win.h"
+#include "plat/win/plat_win.h"
 
 #include "win_gblvar.h"
 #include "gblvar.h"
