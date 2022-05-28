@@ -10,5 +10,6 @@
 .vscode/targets.log
 .vscode/configurationCache.log
 src.esp32/*
+src.mingw/*
 *.exe
 *.o
