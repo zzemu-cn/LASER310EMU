@@ -24,6 +24,7 @@
 
 #define INFO(fmt,arg...)
 
+int emu_exit = 0;
 ScreenUpdateCallback         screenUpdateCallback = NULL;
 extern unsigned long long int FPS;
 
@@ -113,7 +114,7 @@ void emu_thread(void *param)
 
 	FPS=0;
 
-	while(!quited) {
+	while(!emu_exit) {
 		if(!systemRunning) {
 			//total = 0;
 			interval = 0;

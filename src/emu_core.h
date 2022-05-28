@@ -27,6 +27,8 @@ extern uint8_t	vz_dat[0x10000];
 
 extern unsigned int	systemRunning;
 
+/* emulator control */
+extern int emu_exit;
 extern void emu_setScreenUpdateCallback(ScreenUpdateCallback callback);
 extern void	emu_thread(void *param);
 extern void	emu_start(void);
