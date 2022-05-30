@@ -13,3 +13,4 @@ src.esp32/*
 src.mingw/*
 LASER310EMU.exe
 *.o
+sdkconfig.esp32dev
