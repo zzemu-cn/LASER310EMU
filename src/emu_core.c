@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sdl2/sdl.h>
-#include <windows.h>
+#include <stdint.h>
 
 #include "utils/bithacks.h"
 
@@ -25,7 +24,8 @@
 
 #define INFO(fmt,arg...)
 
-extern void UpdateScreen();
+int emu_exit = 0;
+ScreenUpdateCallback         screenUpdateCallback = NULL;
 extern unsigned long long int FPS;
 
 VZCONTEXT	vzcontext;
@@ -67,8 +67,12 @@ unsigned char screenData[0xC000];	// 256 *192
 
 unsigned int systemRunning;
 
-void
-emu_thread(void *param)
+void emu_setScreenUpdateCallback(ScreenUpdateCallback func)
+{
+	screenUpdateCallback = func;
+}
+
+void emu_thread(void *param)
 {
 	uint64_t total;			// 总时钟数
 	uint32_t total_1ms;		// 执行时钟数
@@ -110,7 +114,7 @@ emu_thread(void *param)
 
 	FPS=0;
 
-	while(!quited) {
+	while(!emu_exit) {
 		if(!systemRunning) {
 			//total = 0;
 			interval = 0;
@@ -183,7 +187,10 @@ emu_thread(void *param)
 				emu_drawscreen();
 				FPS++;
 				//LimitFPS();
-				UpdateScreen();
+				if (screenUpdateCallback) {
+					screenUpdateCallback();
+				}
+				
 				ticks_int -= 20;
 				// Z80_INTERRUPT_MODE_1 : RTS 38H
 				cycles = Z80Interrupt(&vzcontext.state, 0, &vzcontext);

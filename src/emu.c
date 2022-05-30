@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <sdl2/sdl.h>
-#include <windows.h>
+#include <string.h>
 
 #include "plat/plat.h"
 #include "emu_core.h"
@@ -48,6 +47,8 @@ int EmulationInitialize(uint8_t *fontrom, uint8_t *sysrom, uint8_t *dosrom)
 	fdc_poll_dat = 0;
 	fd_poll_pos = 0;
 	fd_ct_latch = 0;
+
+	return 0;
 }
 
 

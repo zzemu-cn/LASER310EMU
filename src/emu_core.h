@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+typedef void (*ScreenUpdateCallback)();
+
 extern VZCONTEXT	vzcontext;
 
 #define AUDIO_BUF_MAXLEN (64*64)
@@ -25,6 +27,9 @@ extern uint8_t	vz_dat[0x10000];
 
 extern unsigned int	systemRunning;
 
+/* emulator control */
+extern int emu_exit;
+extern void emu_setScreenUpdateCallback(ScreenUpdateCallback callback);
 extern void	emu_thread(void *param);
 extern void	emu_start(void);
 extern void	emu_close(void *threadid);
