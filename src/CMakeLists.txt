@@ -19,3 +19,5 @@ SRCS
   ${CMAKE_SOURCE_DIR}/src/esp32/main.cpp
 
 )
+
+# spiffs_create_partition_image(storage ../rom FLASH_IN_PROJECT)

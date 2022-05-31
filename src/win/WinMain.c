@@ -360,16 +360,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	char s_fn[MAXPATH];
 
-	sprintf(s_fn, "%s%s", path, "/rom/character set (1983)(vtech).rom");
+	sprintf(s_fn, "%s%s", path, "/rom/character_set.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
 	memcpy(fontrom, tmpFileBuffer, 1024*3);
 
-	sprintf(s_fn, "%s%s", path, "/rom/basic v2.0 (1983)(vtech).rom");
+	sprintf(s_fn, "%s%s", path, "/rom/basic_v2.0.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
 	memcpy(sysrom, tmpFileBuffer, 1024*16);
 
-	//sprintf(s_fn, "%s%s", path, "/rom/dos basic v1.2 (198x)(vtech).rom");
-	sprintf(s_fn, "%s%s", path, "/rom/dos basic v1.2 (198x)(vtech)_patch.rom");
+	sprintf(s_fn, "%s%s", path, "/rom/dos_basic_v1.2_patched.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
 	memcpy(dosrom, tmpFileBuffer, 1024*8);
 
