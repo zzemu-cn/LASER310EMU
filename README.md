@@ -2,6 +2,7 @@
 
 ## Build instructions
 
+### MINGW
 * Download and install msys2-x86_64-20220503.exe from https://www.msys2.org/
 * Start MingW64 environment from c:\msys64
 * Install following packes using pacman
@@ -19,6 +20,11 @@ cd ..
 ./LASER310EMU
 ~~~
 * To clean the build : make clean
+
+### ESP32
+* PlatformIO: Build
+* PlatformIO: Build Filesystem Image
+* PlatformIO: Upload Filesystem Image
 
 ## LASER310 Emulator
 
