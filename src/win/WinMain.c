@@ -22,11 +22,8 @@
 #include "plat_win.h"
 #include "wchar2char.h"
 
-
-
-#include "gblvar.h"
+#include "gbldefs.h"
 #include "win_gblvar.h"
-
 
 #include "vz.h"
 #include "dsk.h"

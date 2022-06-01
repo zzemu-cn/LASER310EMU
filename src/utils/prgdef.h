@@ -7,12 +7,8 @@
 #include <stdint.h>
 #endif
 
-//TODO, BY - need to refactor 
-#ifdef  __MINGW64__
-#define TMP_BUF_LEN	0x100000        //1MB buffer
-#elif   ESP32
-#define TMP_BUF_LEN	0x20000         //128KB buffer
-#endif
+//TODO, refactor to use dynamic allocation. This utility buffer is shared by fd.c and FileIO.c
+#define TMP_BUF_LEN	0x20000     //128KB
 
 #ifdef __cplusplus
 extern "C" {
