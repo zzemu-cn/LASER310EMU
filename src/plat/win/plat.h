@@ -83,7 +83,7 @@ extern void	plat_put_backslash(wchar_t *s);
 extern void	plat_path_slash(wchar_t *path);
 extern int	plat_path_abs(wchar_t *path);
 extern int	plat_dir_check(wchar_t *path);
-extern int	plat_dir_create(wchar_t *path);
+//extern int	plat_dir_create(wchar_t *path);
 extern uint64_t	plat_timer_read(void);
 extern uint32_t	plat_get_ticks(void);
 extern void	plat_delay_ms(uint32_t count);

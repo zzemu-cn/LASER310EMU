@@ -35,12 +35,6 @@
 #include "plat.h"
 #include "plat_win.h"
 
-//#include "ui.h"
-
-
-//#include "win.h"
-#include "win_gblvar.h"
-
 
 /* Platform Public data, specific. */
 HINSTANCE	hinstance;		/* application instance */
@@ -405,12 +399,12 @@ plat_dir_check(wchar_t *path)
 	   (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))) ? 1 : 0);
 }
 
-
-int
-plat_dir_create(wchar_t *path)
-{
-    return((int)SHCreateDirectory(hwndMain, path));
-}
+//TODO, Currently, not used. Switch to use POXIS function instead
+// int
+// plat_dir_create(wchar_t *path)
+// {
+//     return((int)SHCreateDirectory(hwndMain, path));
+// }
 
 
 uint64_t
