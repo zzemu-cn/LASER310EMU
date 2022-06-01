@@ -7,7 +7,8 @@
 #include <stdint.h>
 #endif
 
-#define TMP_BUF_LEN	0x100000
+//TODO, refactor to use dynamic allocation. This utility buffer is shared by fd.c and FileIO.c
+#define TMP_BUF_LEN	0x20000     //128KB
 
 #ifdef __cplusplus
 extern "C" {

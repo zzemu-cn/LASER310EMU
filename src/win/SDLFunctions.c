@@ -5,8 +5,8 @@
 #include "plat/plat.h"
 #include "plat/win/plat_win.h"
 
+#include "gbldefs.h"
 #include "win_gblvar.h"
-#include "gblvar.h"
 
 #include "emu.h"
 #include "emu_core.h"
