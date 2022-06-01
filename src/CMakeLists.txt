@@ -10,7 +10,6 @@ SRCS
   ${CMAKE_SOURCE_DIR}/src/emu_core.c
   ${CMAKE_SOURCE_DIR}/src/dsk.c  
   ${CMAKE_SOURCE_DIR}/src/fd.c
-  ${CMAKE_SOURCE_DIR}/src/gblvar.c
   ${CMAKE_SOURCE_DIR}/src/vkey.c
   ${CMAKE_SOURCE_DIR}/src/vz.c
   ${CMAKE_SOURCE_DIR}/src/plat/esp32/plat_esp32.c
