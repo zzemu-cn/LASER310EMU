@@ -22,7 +22,9 @@ cd ..
 * To clean the build : make clean
 
 ### ESP32
-
+* PlatformIO: Build
+* PlatformIO: Build Filesystem Image
+* PlatformIO: Upload Filesystem Image
 
 ## LASER310 Emulator
 

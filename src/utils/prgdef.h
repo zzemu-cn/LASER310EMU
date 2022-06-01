@@ -7,7 +7,12 @@
 #include <stdint.h>
 #endif
 
-#define TMP_BUF_LEN	0x100000
+//TODO, BY - need to refactor 
+#ifdef  __MINGW64__
+#define TMP_BUF_LEN	0x100000        //1MB buffer
+#elif   ESP32
+#define TMP_BUF_LEN	0x20000         //128KB buffer
+#endif
 
 #ifdef __cplusplus
 extern "C" {
