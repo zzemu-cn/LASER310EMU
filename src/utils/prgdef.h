@@ -8,7 +8,8 @@
 #endif
 
 //TODO, refactor to use dynamic allocation. This utility buffer is shared by fd.c and FileIO.c
-#define TMP_BUF_LEN	0x20000     //128KB
+//TODO, very large buffer, change to use heap memory
+#define TMP_BUF_LEN	100*1024     //100KB for Disk image 
 
 #ifdef __cplusplus
 extern "C" {

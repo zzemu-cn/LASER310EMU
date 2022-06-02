@@ -62,9 +62,9 @@ D4     0    1    0    1    0     1     0    1
 
 typedef struct {
 	Z80_STATE	state;
-	//unsigned char	memory[0x10000];
-	uint8_t		memory[0x10000];
-	uint8_t		vram[0x2000];
+	//TODO, very large buffer, change rom sections to use .TEXT segment?
+	uint8_t		memory[0x10000];	//64KB
+	uint8_t		vram[0x2000];		//8KB
 	uint8_t		scancode[10];	// 扩展按键  scancode[8] 上下左右 Backspace TAB ESC `  scancode[9] = [ ] \ / LALT RALT
 	uint8_t		vscancode[10];	// 虚拟按键（自动输入）
 	uint8_t		vkey[VKEY_MAXLEN];

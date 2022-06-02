@@ -51,7 +51,6 @@ extern int InitializeSound();
 // External variables and arrays.
 
 extern unsigned char joyState[9];
-extern unsigned char screenData[0xC000];
 extern unsigned int CPURunning;
 extern unsigned long long int FPS;
 extern unsigned int FPSLimit;
@@ -199,12 +198,12 @@ int OpenSDLWindow(HWND hWnd, const int w, const int h)
 	ResizeScreen(w, h);
 
 	//memset(&oldScreenData, 0, 0xC000);
-	//memset(&screenData, 0, 0xC000);
+	//memset(screenData, 0, 0xC000);
 
 	//Uint32 rmask, gmask, bmask, amask;
 	//rmask = 0xFF000000; gmask = 0x00FF0000; bmask = 0x0000FF00; amask = 0x000000FF;	
-	//sdlScreen = SDL_CreateRGBSurfaceFrom(&screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*4, rmask, gmask, bmask, amask);
-	sdlScreen = SDL_CreateRGBSurfaceFrom(&screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*1, 0, 0, 0, 0);
+	//sdlScreen = SDL_CreateRGBSurfaceFrom(screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*4, rmask, gmask, bmask, amask);
+	sdlScreen = SDL_CreateRGBSurfaceFrom(screenData, SCREEN_RES_W, SCREEN_RES_H, SCREEN_BPP, SCREEN_RES_W*1, 0, 0, 0, 0);
 
 /*
 3'b000	24'h07ff00 : // GREEN

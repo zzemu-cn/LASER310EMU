@@ -13,19 +13,16 @@
 
 #include "gbldefs.h"
 #include "esp32/esp32_gblvar.h"
+#include "emu.h"
 #include "emu_core.h"
 
 #include "FileIO.h"
 
 #include "fabgl.h"
 
-#define CHARROM_SIZE  0x0C00
-#define SYSROM_SIZE   0x4000
-#define DOSROM_SIZE   0x2000
-
-uint8_t	fontrom[CHARROM_SIZE];
-uint8_t sysrom[SYSROM_SIZE];
-uint8_t	dosrom[DOSROM_SIZE];
+uint8_t	*fontrom = NULL;
+uint8_t *sysrom = NULL;
+uint8_t	*dosrom = NULL;
 
 fabgl::VGADirectController DisplayController;
 
@@ -81,25 +78,32 @@ bool setup()
   ESP_LOGI(TAG, "SPIFFS partition mounted.");
 
   tmpFileBuffer = LoadRomFile("/spiffs/character_set.rom", &fileSize);
-  if (!tmpFileBuffer || fileSize != sizeof(fontrom)) {
+  fontrom = (uint8_t *)malloc(CHARROM_SIZE);  
+  if (tmpFileBuffer && fontrom) {
+      memcpy(fontrom, tmpFileBuffer, CHARROM_SIZE);
+  } else {
     ESP_LOGE(TAG, "Failed to load character_set.rom");
     return false;
   }
-	memcpy(fontrom, tmpFileBuffer, CHARROM_SIZE);
 
 	tmpFileBuffer = LoadRomFile("/spiffs/basic_v2.0.rom", &fileSize);
-  if (!tmpFileBuffer || fileSize != sizeof(sysrom)) {
+  sysrom = (uint8_t *)malloc(SYSROM_SIZE);  
+  if (tmpFileBuffer && sysrom) {
+	  memcpy(sysrom, tmpFileBuffer, SYSROM_SIZE);
+  } else {    
     ESP_LOGE(TAG, "Failed to load basic_v2.0.rom");
     return false;
   }
-	memcpy(sysrom, tmpFileBuffer, SYSROM_SIZE);
+
 
 	tmpFileBuffer = LoadRomFile("/spiffs/dos_basic_v1.2_patched.rom", &fileSize);
-  if (!tmpFileBuffer || fileSize != sizeof(dosrom)) {
+  dosrom = (uint8_t *)malloc(DOSROM_SIZE);  
+  if (tmpFileBuffer && dosrom) {
+	  memcpy(dosrom, tmpFileBuffer, DOSROM_SIZE);
+  } else {    
     ESP_LOGE(TAG, "Failed to load dos_basic_v1.2_patched.rom");
     return false;
-  }  
-	memcpy(dosrom, tmpFileBuffer, DOSROM_SIZE);
+  }
 
   return true;
 }
@@ -108,6 +112,24 @@ void app_main()
 {
   if (setup() == true) {
     ESP_LOGI(TAG, "LAER310EMU started.");
+
+    EmulationInitialize(fontrom, sysrom, dosrom);
+
+    if (fontrom) {
+      free(fontrom);
+      fontrom = NULL;
+    }
+
+    if (sysrom) {
+      free(sysrom);
+      sysrom = NULL;
+    }
+
+    if (dosrom) {
+      free(dosrom);
+      dosrom = NULL;
+    }
+
   }
   else {
     ESP_LOGE(TAG, "Failed to initialize LASER310EMU."); 

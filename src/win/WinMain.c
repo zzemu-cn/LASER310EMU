@@ -18,7 +18,7 @@
 #endif
 */
 
-#include "plat.h"
+#include "plat/plat.h"
 #include "plat_win.h"
 #include "wchar2char.h"
 
@@ -56,10 +56,6 @@ extern void AddFPSTimer();
 extern void RemoveFPSTimer();
 extern int  OpenSDLWindow(HWND hWnd, const int w, const int h);
 extern void ResizeScreen(const int w, const int h);
-
-extern int EmulationInitialize(unsigned char *fontrom, unsigned char *sysrom, unsigned char *dosrom);
-extern void RunEmulation();
-extern void PauseEmulation();
 //----------------------------------------//
 
 /* Emulator start/stop support functions. */
@@ -357,15 +353,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	sprintf(s_fn, "%s%s", path, "/rom/character_set.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(fontrom, tmpFileBuffer, 1024*3);
+	memcpy(fontrom, tmpFileBuffer, CHARROM_SIZE);
 
 	sprintf(s_fn, "%s%s", path, "/rom/basic_v2.0.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(sysrom, tmpFileBuffer, 1024*16);
+	memcpy(sysrom, tmpFileBuffer, SYSROM_SIZE);
 
 	sprintf(s_fn, "%s%s", path, "/rom/dos_basic_v1.2_patched.rom");
 	tmpFileBuffer = LoadRomFile(s_fn, &fileSize);
-	memcpy(dosrom, tmpFileBuffer, 1024*8);
+	memcpy(dosrom, tmpFileBuffer, DOSROM_SIZE);
 
 	EmulationInitialize(fontrom, sysrom, dosrom);
 
@@ -546,15 +542,7 @@ do_start(void)
 void
 do_stop(void)
 {
-	quited = 1;
-
-	plat_delay_ms(100);
-
-	//if (source_hwnd)
-	//PostMessage((HWND) (uintptr_t) source_hwnd, WM_HAS_SHUTDOWN, (WPARAM) 0, (LPARAM) hwndMain);
-
-	emu_close(thMain);
-
+	StopEmulation(thMain);
 	thMain = NULL;
 }
 

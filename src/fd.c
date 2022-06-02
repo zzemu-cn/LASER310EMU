@@ -59,6 +59,7 @@ WRITE_DATA_BIT		FDC_CT[5]
 	19.75us 其中上沿1.125us
 */
 
+//TODO, very large buffer, change to use heap memory
 uint8_t fd_buf_d1[FD_DISK_LEN];
 uint8_t fd_buf_d2[FD_DISK_LEN];
 

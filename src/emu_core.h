@@ -8,6 +8,12 @@
 extern "C" {
 #endif
 
+#define CHARROM_SIZE  0x0C00    //3KB
+#define SYSROM_SIZE   0x4000    //16KB
+#define DOSROM_SIZE   0x2000    //8KB
+#define VRAM_SIZE     0x2000    //8KB
+#define RAM_SIZE      0x10000   //64KB
+
 typedef void (*ScreenUpdateCallback)();
 
 extern VZCONTEXT	vzcontext;
@@ -23,6 +29,8 @@ extern char		vz_name[18];
 extern uint8_t	vz_type;
 extern uint16_t	vz_start;
 extern uint16_t	vz_len;
+
+extern unsigned char *screenData;
 extern uint8_t	vz_dat[0x10000];
 
 extern unsigned int	systemRunning;

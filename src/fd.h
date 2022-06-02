@@ -8,7 +8,7 @@
 
 // 85
 #define FD_TRACK_LEN			2500000
-#define FD_DISK_LEN				(2500000*40)
+#define FD_DISK_LEN				(FD_TRACK_LEN*40)
 
 // 89
 //#define FD_TRACK_LEN			2380000
@@ -61,12 +61,6 @@ extern uint32_t fd_poll_pos;
 extern uint8_t fd_ct_latch;
 
 extern uint8_t fdc_dat_latch;
-
-
-typedef struct {
-	int			i;
-	uint8_t		dat[1000];
-} fd_log;
 
 uint8_t fdc_io_ct(uint8_t ct);
 uint8_t fdc_io_poll();

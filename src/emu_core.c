@@ -35,6 +35,7 @@ char		vz_name[18];
 uint8_t		vz_type;
 uint16_t	vz_start;
 uint16_t	vz_len;
+//TODO, very large buffer, change to use heap memory
 uint8_t		vz_dat[0x10000];
 
 // 17745000/5/50 = 3549
@@ -46,6 +47,7 @@ uint8_t		vz_dat[0x10000];
 // 24000Hz
 // 17745000/5/24000 = 147.875
 
+//TODO, very large buffer, change to use heap memory
 int16_t audio_buf[AUDIO_BUF_MAXLEN];
 int audio_buf_pos;
 
@@ -63,7 +65,7 @@ void emu_drawscreen();
 
 
 // An array that holds the pixel data that will actually be drawn to the screen.
-unsigned char screenData[0xC000];	// 256 *192
+unsigned char *screenData = NULL;	// frame buffer: 256 *192
 
 unsigned int systemRunning;
 
