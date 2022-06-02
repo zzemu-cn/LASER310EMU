@@ -88,7 +88,6 @@ extern int sdlwin_ready;
 uint8_t	fontrom[0x1000];
 uint8_t sysrom[0x4000];
 uint8_t	dosrom[0x2000];
-uint8_t	vzfrom[0x10000];
 
 HANDLE hRomFile;
 HANDLE logFile;
