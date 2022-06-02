@@ -24,7 +24,7 @@
 
 #include "gbldefs.h"
 #include "win_gblvar.h"
-
+#include "FileIO.h"
 #include "vz.h"
 #include "dsk.h"
 #include "emu.h"
@@ -52,7 +52,6 @@ extern void CloseSDL();
 extern int  InitializeSDL();
 extern void UpdateScreen();
 
-uint8_t* LoadRomFile(char filename[], unsigned long int *fileSize);
 extern void AddFPSTimer();
 extern void RemoveFPSTimer();
 extern int  OpenSDLWindow(HWND hWnd, const int w, const int h);
@@ -117,7 +116,7 @@ void OpcodeError( LPCTSTR errorText)
 //----------------------------------------//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	uint8_t *tmpFileBuffer = 0;
+	uint8_t *tmpFileBuffer = NULL;
 	unsigned long int fileSize = 0;
 
 	switch(msg)	{
@@ -320,7 +319,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	TCHAR title[200];
 	WNDCLASSEX wc;			/* buffer for main window's class */
 
-	uint8_t *tmpFileBuffer = 0;
+	uint8_t *tmpFileBuffer = NULL;
 	unsigned long int fileSize = 0;
 
 	TCHAR szPath[MAXPATH];
