@@ -15,8 +15,8 @@ SRCS
   ${CMAKE_SOURCE_DIR}/src/plat/esp32/plat_esp32.c
   ${CMAKE_SOURCE_DIR}/src/utils/prgdef.c
   ${CMAKE_SOURCE_DIR}/src/z80/z80emu.c
+  ${CMAKE_SOURCE_DIR}/src/FileIO.c
   ${CMAKE_SOURCE_DIR}/src/esp32/main.cpp
 
 )
-
 # spiffs_create_partition_image(storage ../rom FLASH_IN_PROJECT)

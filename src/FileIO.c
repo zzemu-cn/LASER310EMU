@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <windows.h>
+#include "FileIO.h"
 
-#include "prgdef.h"
+#include "utils/prgdef.h"
 
 // Handle to track open file.
 FILE *handle;
@@ -36,7 +36,7 @@ size_t SaveFile(const char fn[], char* buf, const size_t sz)
 // Variables: filename is a string holding//
 // the ROM file to be opened.             //
 //----------------------------------------//
-uint8_t * LoadRomFile(const char filename[], unsigned long int *bytesRead)
+uint8_t * LoadRomFile(const char *filename, unsigned long int *bytesRead)
 {
 	FILE *fp;
 	//----------------------------------------//
@@ -71,17 +71,17 @@ uint8_t * LoadRomFile(const char filename[], unsigned long int *bytesRead)
 	return tmp_buf;
 }
 
-size_t filelen(FILE *fp)
+off_t filelen(FILE *fp)
 {
-	size_t	curpos, pos;
+	off_t curpos, pos;
 
-	if( (curpos = ftello(fp))==-1LL )
+	if( (curpos = ftello(fp)) == -1LL )
 		return -1LL;
 
 	if( fseeko( fp, 0LL, SEEK_END ) )
 		return -1LL;
 
-	if( (pos = ftello(fp))==-1LL )
+	if( (pos = ftello(fp)) == -1LL )
 		return -1LL;
 
 	if( fseeko( fp, curpos, SEEK_SET ) )
