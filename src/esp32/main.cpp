@@ -44,6 +44,7 @@ void startEmulator() {
 
 	/* Start the emulator, really. */
   emu_setScreenUpdateCallback(UpdateScreen);
+  //vTaskCreate();
 //	thMain = thread_create(emu_thread, &emu_exit);
 //	SetThreadPriority(thMain, THREAD_PRIORITY_HIGHEST);
   

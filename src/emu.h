@@ -19,7 +19,7 @@ extern "C" {
 int EmulationInitialize(uint8_t *fontrom, uint8_t *sysrom, uint8_t *dosrom);
 void RunEmulation();
 void PauseEmulation();
-void StopEmulation();
+void StopEmulation(thread_t *threadid);
 
 #ifdef __cplusplus
 }
