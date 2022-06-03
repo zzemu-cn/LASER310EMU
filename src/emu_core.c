@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "utils/bithacks.h"
 
@@ -24,7 +25,6 @@
 
 #define INFO(fmt,arg...)
 
-int emu_exit = 0;
 ScreenUpdateCallback         screenUpdateCallback = NULL;
 extern unsigned long long int FPS;
 
@@ -82,7 +82,8 @@ void emu_thread(void *param)
 
 	uint32_t audio_time_cnt;
 
-	// 50*312*227.5*5 = 17745000
+	//TODO, #define in header
+	// 50*312*227.5*5 = 17745000	//Laser310 XTAL 
 	// 17745000/5/1000 = 3549
 	const uint32_t cycles_1ms = 3549; // 每毫秒执行CPU时钟数
 
@@ -116,7 +117,8 @@ void emu_thread(void *param)
 
 	FPS=0;
 
-	while(!emu_exit) {
+	//TODO, Should use *param to let emulator thread quit on itself. (quited) Good enough for now.
+	while(true) {
 		if(!systemRunning) {
 			//total = 0;
 			interval = 0;

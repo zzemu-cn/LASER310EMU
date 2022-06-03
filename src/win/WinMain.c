@@ -23,6 +23,7 @@
 #include "wchar2char.h"
 
 #include "gbldefs.h"
+#include "utils/prgdef.h"
 #include "win_gblvar.h"
 #include "FileIO.h"
 #include "vz.h"
@@ -39,7 +40,8 @@ HWND hwndMain;	// application main window
 HACCEL	haccel;			/* handle to accelerator table */
 //HWND	hwndRender;		/* machine render window */
 
-HANDLE	thMain;
+//Emulator thread 
+HANDLE	thMain = NULL;
 
 //----------------------------------------//
 // External data                          //
@@ -347,7 +349,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	path = szDirname;
 
-	//MessageBox(NULL, path, "dbg", MB_OK);
+	if (!tmp_buf) {
+		tmp_buf = malloc(TMP_BUF_LEN);
+	}
 
 	char s_fn[MAXPATH];
 
@@ -473,16 +477,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	AddFPSTimer();
 
 	/* Run the message loop. It will run until GetMessage() returns 0 */
-	while (!quited) {
+	while (thMain != NULL) {
 		bRet = GetMessage(&msg, NULL, 0, 0);
-		if ((bRet == 0) || quited) break;
+		if (bRet == 0)
+			break;
 
 		if (bRet == -1) {
 			//fatal("bRet is -1\n");
 		}
 
 		if (msg.message == WM_QUIT) {
-			quited = 1;
 			break;
 		}
 
@@ -507,7 +511,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	// dump fdc buf
 	//SaveFile("fd1.bin", fd_buf_d1, FD_TRACK_LEN);
-
+	if (tmp_buf) {
+		free(tmp_buf);
+		tmp_buf = NULL;
+	}
 	return 0;
 
 }
@@ -523,7 +530,7 @@ do_start(void)
 	LARGE_INTEGER qpc;
 
 	/* We have not stopped yet. */
-	quited = 0;
+	int quited = 0;
 
 	/* Initialize the high-precision timer. */
 	timeBeginPeriod(1);

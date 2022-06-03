@@ -58,7 +58,9 @@ D4     0    1    0    1    0     1     0    1
 
 */
 
-#define	VKEY_MAXLEN	(32*1024)
+// TODO, very large buffer, used by GetTextFromClipboard in Emu_EventFilter() in SDLFunctions.h
+// HACK, There is no buffer overflow protection on Windows platform.
+#define	VKEY_MAXLEN	(10*1024)
 
 typedef struct {
 	Z80_STATE	state;
@@ -67,7 +69,7 @@ typedef struct {
 	uint8_t		vram[0x2000];		//8KB
 	uint8_t		scancode[10];	// 扩展按键  scancode[8] 上下左右 Backspace TAB ESC `  scancode[9] = [ ] \ / LALT RALT
 	uint8_t		vscancode[10];	// 虚拟按键（自动输入）
-	uint8_t		vkey[VKEY_MAXLEN];
+	uint8_t		vkey[VKEY_MAXLEN];	//Windows Copy/Paste support
 	int			vkey_len;
 	int			vkey_cur;
 	//uint8_t		mc6847gm;

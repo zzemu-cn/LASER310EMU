@@ -4,6 +4,8 @@
 #include "utils/bithacks.h"
 #include "fd.h"
 
+#define	EMU_FDD_SUPPORT
+
 /*
 PHASE0			FDC_CT[0]
 PHASE1			FDC_CT[1]

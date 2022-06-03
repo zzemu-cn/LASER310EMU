@@ -13,8 +13,6 @@ extern "C" {
 # define GLOBAL extern
 #endif
 
-GLOBAL int quited;
-
 extern TickType_t plat_get_ticks(void);
 extern void	plat_delay_ms(uint32_t count);
 

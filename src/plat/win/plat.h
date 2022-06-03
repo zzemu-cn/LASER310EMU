@@ -53,7 +53,6 @@ extern "C" {
 /* Global variables residing in the platform module. */
 GLOBAL int	dopause,			/* system is paused */
 		doresize,				/* screen resize requested */
-		quited,					/* system exit requested */
 		mouse_capture;			/* mouse is captured in app */
 GLOBAL uint64_t	timer_freq;
 GLOBAL int	infocus;

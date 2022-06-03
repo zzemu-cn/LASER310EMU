@@ -10,8 +10,8 @@
 #include "esp_spiffs.h"
 
 #include "plat/plat.h"
-
 #include "gbldefs.h"
+#include "utils/prgdef.h"
 #include "esp32/esp32_gblvar.h"
 #include "emu.h"
 #include "emu_core.h"
@@ -35,12 +35,16 @@ void initDisplay() {
   DisplayController.setResolution(VGA_320x200_75Hz);    //VGA_640x480_60Hz  
 }
 
+void UpdateScreen() {
+
+}
+
 void startEmulator() {
-  emu_exit = 0;
+  int emu_exit = 0;
 
 	/* Start the emulator, really. */
-//	emu_setScreenUpdateCallback(UpdateScreen);
-//	thMain = thread_create(emu_thread, &quited);
+  emu_setScreenUpdateCallback(UpdateScreen);
+//	thMain = thread_create(emu_thread, &emu_exit);
 //	SetThreadPriority(thMain, THREAD_PRIORITY_HIGHEST);
   
   printf("Emulator started.");
@@ -77,6 +81,10 @@ bool setup()
 
   ESP_LOGI(TAG, "SPIFFS partition mounted.");
 
+	if (!tmp_buf) {
+		tmp_buf = (uint8_t *)malloc(TMP_BUF_LEN);
+	}
+
   tmpFileBuffer = LoadRomFile("/spiffs/character_set.rom", &fileSize);
   fontrom = (uint8_t *)malloc(CHARROM_SIZE);  
   if (tmpFileBuffer && fontrom) {
@@ -95,7 +103,6 @@ bool setup()
     return false;
   }
 
-
 	tmpFileBuffer = LoadRomFile("/spiffs/dos_basic_v1.2_patched.rom", &fileSize);
   dosrom = (uint8_t *)malloc(DOSROM_SIZE);  
   if (tmpFileBuffer && dosrom) {
@@ -108,12 +115,21 @@ bool setup()
   return true;
 }
 
+void teardown()
+{
+	if (tmp_buf) {
+		free(tmp_buf);
+		tmp_buf = NULL;
+	}
+}
+
 void app_main()
 {
   if (setup() == true) {
     ESP_LOGI(TAG, "LAER310EMU started.");
 
     EmulationInitialize(fontrom, sysrom, dosrom);
+    startEmulator();
 
     if (fontrom) {
       free(fontrom);
@@ -130,9 +146,14 @@ void app_main()
       dosrom = NULL;
     }
 
+    for(;;) {
+      //Main loop
+    }
   }
   else {
     ESP_LOGE(TAG, "Failed to initialize LASER310EMU."); 
   }
+
+  teardown();
 }
 }

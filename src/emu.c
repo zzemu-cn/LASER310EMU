@@ -35,7 +35,8 @@ int EmulationInitialize(uint8_t *fontrom, uint8_t *sysrom, uint8_t *dosrom)
 	/* Emulate. */
 	Z80Reset(&vzcontext.state);
 	vzcontext.state.pc = 0x0000;
-	
+
+#ifdef	EMU_FDD_SUPPORT
 	// vz fd
 	fd_track_d1 = 0;
 	fd_track_d2 = 0;
@@ -44,12 +45,13 @@ int EmulationInitialize(uint8_t *fontrom, uint8_t *sysrom, uint8_t *dosrom)
 	fdc_poll_dat = 0;
 	fd_poll_pos = 0;
 	fd_ct_latch = 0;
+#endif
 
 	if (!screenData) {
 		screenData = malloc(0xC000);
 	}
 
-	return 0;
+	return (screenData!=NULL);
 }
 
 
@@ -75,7 +77,6 @@ void PauseEmulation()
 
 void StopEmulation(thread_t *threadid)
 {
-	quited = 1;
 	plat_delay_ms(100);
 
 	emu_close(threadid);
