@@ -47,5 +47,12 @@ F1        键盘输入RUN
 F11       全屏切换
 鼠标右键  剪切板的内容自动输入到模拟器
 
+## LASER310SDL Emulator
+
+把 vz 文件拖拽到模拟器窗口，模拟磁带载入。
+
+
 ![LASER310EMU](LASER310EMU.JPG)
 ![LASER310DD20](LASER310DD20.JPG)
+![LASER310LIGHTPEN](LASER310LP.PNG)
+
