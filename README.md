@@ -51,8 +51,13 @@ F11       全屏切换
 
 把 vz 文件拖拽到模拟器窗口，模拟磁带载入。
 
+## LASER310 PH 1.3A
+
+来自《微电脑剖析及功能改进》彭辛岷1993年一书的BASIC磁带扩充系统，支持中文显示。
+
+
 
 ![LASER310EMU](LASER310EMU.JPG)
 ![LASER310DD20](LASER310DD20.JPG)
 ![LASER310LIGHTPEN](LASER310LP.PNG)
-
+![LASER310PH1.3A](PH1.3.PNG)
