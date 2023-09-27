@@ -10,7 +10,6 @@
 pacman -S mingw-w64-x86_64-gcc
 pacman -S mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer
 pacman -S make
-pacman -S mingw-w64-x86_64-xmake
 ~~~ 
 * Change directory to LASER310EMU/src.
 ~~~
